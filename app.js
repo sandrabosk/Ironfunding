@@ -5,14 +5,22 @@ const logger = require("morgan");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+// authentication:
 const session = require("express-session");
 const passport = require("passport");
+const MongoStore = require("connect-mongo")(session);
+
 const flash = require("connect-flash");
 const expressLayouts = require("express-ejs-layouts");
+// Passport Strategy & Configuration
+const LocalStrategy = require("passport-local").Strategy;
+const User = require("./models/user-model");
+const bcrypt = require("bcrypt");
 
 // Load our ENVIRONMENT VARIABLES from the .env file in dev
 // (this is for dev only, but in prod it just doesn't do anything)
 require("dotenv").config();
+require("./config/passport-config.js");
 
 // Tell node to run the code contained in this file
 // (this sets up passport and our strategies)
@@ -39,16 +47,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(expressLayouts);
-// app.use(
-//   session({
-//     secret: "my cool passport app",
+// sessions: 
+app.use(
+  session({
+    secret: "ironfundingdev",
+    resave: false,
+    saveUninitialized: true,
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
+  })
+);
+// THIS GOES AFTER THE SESSION PART:
 
-//     // these two options are there to prevent warnings in terminal
-//     resave: true,
-//     saveUninitialized: true
-//   })
-// );
+
+
+
 app.use(flash());
 
 // These need to come AFTER the session middleware
@@ -85,7 +97,9 @@ app.use((req, res, next) => {
 // ----------------------------------------------------------
 const index = require("./routes/index");
 app.use("/", index);
-;
+
+const authRoutes = require("./routes/auth.js");
+app.use("/", authRoutes);
 // ----------------------------------------------------------
 
 // catch 404 and forward to error handler
