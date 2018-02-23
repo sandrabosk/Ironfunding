@@ -1,0 +1,21 @@
+{
+  "name": "ironfunding",
+  "description": "",
+  "main": "",
+  "authors": [
+    "sandrabosk <sandraboskovic@hotmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.3.1",
+    "bootstrap": "^4.0.0"
+  }
+}
