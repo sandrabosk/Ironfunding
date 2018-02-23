@@ -15,6 +15,7 @@ const expressLayouts = require("express-ejs-layouts");
 // Passport Strategy & Configuration
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("./models/user-model");
+const Campaign = require("./models/campaign-model");
 const bcrypt = require("bcrypt");
 
 // Load our ENVIRONMENT VARIABLES from the .env file in dev
@@ -100,6 +101,9 @@ app.use("/", index);
 
 const authRoutes = require("./routes/auth.js");
 app.use("/", authRoutes);
+
+const campaignRoutes = require("./routes/campaign.js");
+app.use("/campaigns", campaignRoutes);
 // ----------------------------------------------------------
 
 // catch 404 and forward to error handler

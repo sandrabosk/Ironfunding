@@ -29,7 +29,7 @@ passport.deserializeUser((userId, cb) => {
   });
 });
 
-
+// PASSPORT CONFIG FOR SIGNUP:
 passport.use('local-signup', new LocalStrategy(
   { passReqToCallback: true },
   (req, username, password, next) => {
@@ -60,4 +60,21 @@ passport.use('local-signup', new LocalStrategy(
             }
         });
     });
+}));
+
+// PASSPORT CONFIG FOR LOG IN
+passport.use('local-login', new LocalStrategy((username, password, next) => {
+  User.findOne({ username }, (err, user) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return next(null, false, { message: "Incorrect username" });
+    }
+    if (!bcrypt.compareSync(password, user.password)) {
+      return next(null, false, { message: "Incorrect password" });
+    }
+
+    return next(null, user);
+  });
 }));
