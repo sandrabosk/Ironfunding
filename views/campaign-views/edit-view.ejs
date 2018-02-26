@@ -49,3 +49,13 @@
     </div>
   </div>
 </div>
+
+<% if (typeof(errors) !== 'undefined'){ %>
+  <div class="alert alert-danger">
+  <ul>
+    <% for (let error in errors){ %>
+      <li><%= errors[error].message %></li>
+    <% } %>
+  </ul>
+  </div>
+<% } %>

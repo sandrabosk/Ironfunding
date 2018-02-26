@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const moment = require("moment");
 const TYPES = require("./campaign-types-model");
 
 const CampaignSchema = new Schema({
@@ -60,6 +61,11 @@ CampaignSchema.virtual("inputFormattedDate").get(function() {
   return moment(this.deadline).format("YYYY-MM-DD");
 });
 
-
+// Do not use a fat arrow here ((user) => {...}) because that will 
+// change the meaning of this. this will be the specific campaign 
+// we call this method on.
+CampaignSchema.methods.belongsTo = function(user) {
+  return this._creator.equals(user._id);
+};
 
 module.exports = mongoose.model("Campaign", CampaignSchema);
